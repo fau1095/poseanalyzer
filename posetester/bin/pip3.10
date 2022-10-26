@@ -1,4 +1,4 @@
-#!/Users/fabriziomendez/venvs/poseanalyzer/posetester/bin/python3.10
+#!/Users/fabriziomendez/venvs/poseanalyzer/posetester/bin/python3.11
 # -*- coding: utf-8 -*-
 import re
 import sys
