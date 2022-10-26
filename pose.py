@@ -1,25 +1,19 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[2]:
-
 
 #get_ipython().system('pip install mediapipe opencv-python')
 
 
-# In[1]:
 
 
 import cv2 
 import mediapipe as mp
 import numpy as np
+#setup
 mp_drawing = mp.solutions.drawing_utils
+mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
 
 
-# In[2]:
-
-
+# For webcam input:
 cap = cv2.VideoCapture(0)
 while cap.isOpened():
     ret, frame = cap.read() 
@@ -32,14 +26,6 @@ cap.release()
 cv2.destroyAllWindows()
         
 
-
-# In[ ]:
-
-
-
-
-
-# In[3]:
 
 
 cap = cv2.VideoCapture(0)
