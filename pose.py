@@ -1,10 +1,10 @@
-
+#if one wants to use iPython, activate this line
 #get_ipython().system('pip install mediapipe opencv-python')
 
 
 
-
-import cv2 
+#imports
+import cv2
 import mediapipe as mp
 import numpy as np
 #setup
@@ -52,6 +52,7 @@ with mp_pose.Pose(
     # Plot pose world landmarks.
     mp_drawing.plot_landmarks(
         results.pose_world_landmarks, mp_pose.POSE_CONNECTIONS)
+                
 # For webcam input:
 cap = cv2.VideoCapture(0)
 while cap.isOpened():
