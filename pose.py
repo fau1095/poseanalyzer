@@ -175,10 +175,10 @@ shoulder, elbow, wrist
 shoulder2, elbow2, wrist2
 
 calculate_angle(shoulder, elbow, wrist)
-tuple(np.multiply(elbow, [640, 480]).astype(int))
+tuple(np.multiply(elbow, [1920, 1080]).astype(int))
 
 calculate_angle2(shoulder2, elbow2, wrist2)
-tuple(np.multiply(elbow2, [640, 480]).astype(int))
+tuple(np.multiply(elbow2, [1920, 1080]).astype(int))
 
 cap = cv2.VideoCapture(0)
 ## Setup mediapipe instance
@@ -215,11 +215,11 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             angle2 = calculate_angle2(shoulder2, elbow2, wrist2)
             # Visualize angle
             cv2.putText(image, str(angle), 
-                           tuple(np.multiply(elbow, [640, 480]).astype(int)), 
+                           tuple(np.multiply(elbow, [1920, 1080]).astype(int)), 
                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA
                                 )
             cv2.putText(image, str(angle2), 
-                           tuple(np.multiply(elbow2, [640, 480]).astype(int)), 
+                           tuple(np.multiply(elbow2, [1920, 1080]).astype(int)), 
                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA
                                 )
         except:
@@ -280,11 +280,11 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             angle2 = calculate_angle2(shoulder2, elbow2, wrist2)
             # Visualize angle
             cv2.putText(image, str(angle), 
-                           tuple(np.multiply(elbow, [640, 480]).astype(int)), 
+                           tuple(np.multiply(elbow, [1920, 1080]).astype(int)), 
                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA
                                 )
             cv2.putText(image, str(angle2), 
-                           tuple(np.multiply(elbow2, [640, 480]).astype(int)), 
+                           tuple(np.multiply(elbow2, [1920, 1080]).astype(int)), 
                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA
                                 )
             # Curl counter logic
