@@ -279,7 +279,8 @@ counter = 0
 stage = None
 counter2 = 0 
 stage2 = None
-
+counter3 = 0 
+stage3 = None
 ## Setup mediapipe instance
 with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
     while cap.isOpened():
@@ -326,6 +327,9 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                            tuple(np.multiply(elbow2, [1920, 1080]).astype(int)), 
                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
             
+            cv2.putText(image, str(angle3), 
+                           tuple(np.multiply(elbow3, [1920, 1080]).astype(int)), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
             # Curl counter logic
             if angle > 160:
                 stage = "down"
@@ -340,7 +344,13 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 stage2="up"
                 counter2 +=1
                 print("Right Arm Curl: ",counter2)
-                       
+            
+            if angle3 > 170:
+                stage3 = "down"
+            if angle3 < 91 and stage3 =='down':
+                stage3="up"
+                counter3 +=1
+                print("Knee Curl: ",counter3)           
         except:
             pass
         # Render curl counter
