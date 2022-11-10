@@ -175,10 +175,23 @@ def calculate_angle3(a,b,c):
         angle3 = 360-angle3
         
     return angle3
+
+def calculate_angle4(a,b,c):
+    a = np.array(a) # First
+    b = np.array(b) # Mid
+    c = np.array(c) # End
     
-shoulder = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
-elbow = [landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y] # Always middle angle
-wrist = [landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
+    radians = np.arctan2(c[1]-b[1], c[0]-b[0]) - np.arctan2(a[1]-b[1], a[0]-b[0])
+    angle4 = np.abs(radians*180.0/np.pi)
+    
+    if angle4 >180.0:
+        angle4 = 360-angle4
+        
+    return angle4
+
+shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
+elbow = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y] # Always middle angle
+wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
 
 shoulder2 = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
 elbow2 = [landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y] # Always middle angle
@@ -188,9 +201,14 @@ hip3 = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,landmarks[mp_pose.Pose
 knee3 = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y] # Always middle angle
 ankle3 = [landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].y]
 
+hip4 = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
+knee4 = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y] # Always middle angle
+ankle4 = [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y]
+
 shoulder, elbow, wrist
 shoulder2, elbow2, wrist2
 hip3, knee3, ankle3
+hip4, knee4, ankle4
 
 calculate_angle(shoulder, elbow, wrist)
 # The values inside [] represent the resolution of the webcam
@@ -203,6 +221,10 @@ tuple(np.multiply(elbow2, [1920, 1080]).astype(int))
 calculate_angle3(hip3, knee3, ankle3)
 # The values inside [] represent the resolution of the webcam
 tuple(np.multiply(knee3, [1920, 1080]).astype(int))
+
+calculate_angle4(hip4, knee4, ankle4)
+# The values inside [] represent the resolution of the webcam
+tuple(np.multiply(knee4, [1920, 1080]).astype(int))
 
 cap = cv2.VideoCapture(0)
 
@@ -240,10 +262,15 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             knee3 = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y] # Always middle angle
             ankle3 = [landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].y]
 
+            hip4 = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
+            knee4 = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y] # Always middle angle
+            ankle4 = [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y]
+
             # Calculate angle
             angle = calculate_angle(shoulder, elbow, wrist)
             angle2 = calculate_angle2(shoulder2, elbow2, wrist2)
             angle3 = calculate_angle3(hip3, knee3, ankle3)
+            angle4 = calculate_angle4(hip4,knee4, ankle4)
             # Visualize angle
             cv2.putText(image, str(angle), 
                            tuple(np.multiply(elbow, [1920, 1080]).astype(int)), 
@@ -256,7 +283,11 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             cv2.putText(image, str(angle3), 
                            tuple(np.multiply(knee3, [1920, 1080]).astype(int)), 
                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA
-                                )                    
+                                )
+            cv2.putText(image, str(angle4), 
+                           tuple(np.multiply(knee4, [1920, 1080]).astype(int)), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA
+                                )                                        
         except:
             pass
         
@@ -286,6 +317,10 @@ stage2 = None
 
 counter3 = 0 
 stage3 = None
+
+counter4 = 0
+stage4 = None
+
 ## Setup mediapipe instance
 with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
     while cap.isOpened():
@@ -319,10 +354,16 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             knee3 = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y] # Always middle angle
             ankle3 = [landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].y]
 
+            hip4 = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
+            knee4 = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y] # Always middle angle
+            ankle4 = [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y]
+
             # Calculate angle
             angle = calculate_angle(shoulder, elbow, wrist)
             angle2 = calculate_angle2(shoulder2, elbow2, wrist2)
             angle3 = calculate_angle3(hip3, knee3, ankle3)
+            angle4 = calculate_angle4(hip4, knee4, ankle4)
+
             # Visualize angle
             cv2.putText(image, str(angle), 
                            tuple(np.multiply(elbow, [1920, 1080]).astype(int)), 
@@ -335,18 +376,23 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             cv2.putText(image, str(angle3), 
                            tuple(np.multiply(knee3, [1920, 1080]).astype(int)), 
                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+            
+            cv2.putText(image, str(angle4), 
+                           tuple(np.multiply(knee4, [1920, 1080]).astype(int)), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+               
             # Curl counter logic
             if angle > 160:
                 stage = "down"
             if angle < 30 and stage =='down':
-                stage="up"
+                stage = "up"
                 counter +=1
                 print("Left Arm Curl: ",counter)
 
             if angle2 > 160:
                 stage2 = "down"
             if angle2 < 30 and stage2 =='down':
-                stage2="up"
+                stage2 = "up"
                 counter2 +=1
                 print("Right Arm Curl: ",counter2)
             
@@ -355,11 +401,20 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             if angle3 < 91 and stage3 =='down':
                 stage3="up"
                 counter3 +=1
-                print("Knee Curl: ",counter3)           
+                print("Right Knee Curl: ",counter3)
+
+            if angle4 > 170:
+                stage4 = "down"
+            if angle4 < 91 and stage4 =='down':
+                stage4 = "up"
+                counter4 +=1
+                print("Left Knee Curl: ",counter4)               
         except:
             pass
+
         # Render curl counter
         # Setup status box
+        # Not sure yet how to edit this stuff...
         cv2.rectangle(image, (0,0), (225,73), (245,117,16), -1)
         
         # Rep data
